@@ -20,7 +20,7 @@ class Tinyslider {
 		add_action( "plugin_loaded", array( $this, "tinys_load_textdomain" ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'tinys_assets' ) );
 		add_shortcode( 'tslider', array( $this, 'tinys_shortcode_tslider' ) );
-		add_shortcode( 'tslider', array( $this, 'tinys_shortcode_tslide' ) );
+		add_shortcode( 'tslide', array( $this, 'tinys_shortcode_tslide' ) );
 	}
 
 	/**
@@ -40,8 +40,24 @@ class Tinyslider {
 	 * @param $arguments
 	 * @param $content
 	 *
+	 * @return string
 	 */
 	public function tinys_shortcode_tslider( $arguments, $content ) {
+		$defaults = array(
+			'width' => 800,
+			'height'  => 600,
+			'id' => ''
+		);
+		$attributes = shortcode_atts($defaults, $arguments);
+		$content = do_shortcode($content);
+		$shortcode_output = <<<EOD
+		<div style="width: {$attributes['width']}; height: {$attributes['height']}">
+			<div class="slider">
+				{$content}
+			</div>
+		</div>
+EOD;
+		return $shortcode_output;
 
 	}//end method tinys_shortcode_tslider
 
